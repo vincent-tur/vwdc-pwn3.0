@@ -48,7 +48,7 @@ export interface IInsightFacade {
      * to explain what went wrong.
      *
      */
-    addDataset(id: string, content: string): Promise<InsightResponse>;
+    addDataset(id: string, content: string): any;
 
     /**
      * Remove a dataset from UBCInsight.
@@ -69,7 +69,7 @@ export interface IInsightFacade {
      * was not previously added.
      *
      */
-    removeDataset(id: string): Promise<InsightResponse>;
+    removeDataset(id: string): any;
 
     /**
      * Perform a query on UBCInsight.
@@ -89,5 +89,5 @@ export interface IInsightFacade {
      * 424: the query failed because it depends on a resource that has not been PUT. The body should contain {"missing": ["id1", "id2"...]}.
      *
      */
-    performQuery(query: QueryRequest): Promise<InsightResponse>;
+    performQuery(query: QueryRequest): any;
 }

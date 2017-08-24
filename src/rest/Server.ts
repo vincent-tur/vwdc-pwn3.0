@@ -91,12 +91,9 @@ export default class Server {
                 //TODO: https://github.com/ubccpsc/310/blob/2017jan/project/Deliverable3.md
                 that.rest.get('/echo/:msg', Server.echo);
                 that.rest.put('/dataset/:id', Server.addDataset);
-                that.rest.del('/dataset/:id', Server.removeDataset);
-                that.rest.post('/query/:request', Server.performQuery);
+                // that.rest.del('/dataset/:id', Server.removeDataset);
+                // that.rest.post('/query/:request', Server.performQuery);
 
-                that.rest.get('/xml/performSchedule/:lists', Server.performSchedule);
-                that.rest.get('/xml/buildingsInRange/:msg', Server.buildingsInRange);
-                that.rest.get('/xml/performExplore/:msg', Server.performExplore);
 
                 that.rest.get(/.*/, restify.serveStatic({
                     directory: './ui/',
@@ -158,107 +155,59 @@ export default class Server {
     //     });
     // }
 
-    public static performExplore(req: restify.Request, res: restify.Response, next: restify.Next) {
-        try {
-            Server.insightFacade.performQuery(JSON.parse(req.params.msg)).then(function (result) {
-                // Log.info('Server::echo(..) - responding ' + result.code);
-                res.json(result.code, result.body);
-            }).catch(function (result) {
-                // Log.error('Server::echo(..) - responding CATCH result');
-                res.json(result.code, result.body);
-            });
-
-        } catch (err) {
-            // Log.error('Server::echo(..) - responding 400');
-            res.json(400, {error: err.message});
-        }
-        return next();
-    }
-
-    public static buildingsInRange(req: restify.Request, res: restify.Response, next: restify.Next) {
-        try {
-            let param: any = JSON.parse(req.params.msg);
-            let buildingList = param["building"];
-            let meters = param["meters"];
-
-            let response = Server.insightFacade.perfromDistanceCheck(buildingList, meters);
-            res.json(201, JSON.stringify(response));
-        } catch (err) {
-            // Log.error('Server::echo(..) - responding 400');
-            res.json(400, {error: err.message});
-        }
-        return next();
-    }
-
-    public static performSchedule(req: restify.Request, res: restify.Response, next: restify.Next) {
-        try {
-            var courseAndRoomsList = JSON.parse(req.params.lists);
-            var buildings_list = InsightFacade.adapterPerformSchedule_Rooms(courseAndRoomsList["buildings"]);
-            var dpt_list = InsightFacade.adapterPerformSchedule_Courses(courseAndRoomsList["dpt"]);
-
-
-
-            Server.insightFacade.performSchedule(buildings_list, dpt_list);
-        } catch (err) {
-            // Log.error('Server::echo(..) - responding 400');
-            res.json(400, {error: err.message});
-        }
-        return next();
-    }
-
     public static addDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
-        // Log.trace('Server::echo(..) - params: ' + JSON.stringify(req.params));
-        try {
-            Server.insightFacade.addDataset(req.params.id, req.params.body).then(function (result) {
-                // Log.info('Server::echo(..) - responding ' + result.code);
-                res.json(result.code, result.body);
-            }).catch(function (result) {
-                // Log.error('Server::echo(..) - responding CATCH result');
-                res.json(result.code, result.body);
-            });
-
-        } catch (err) {
-            // Log.error('Server::echo(..) - responding 400');
-            res.json(400, {error: err.message});
-        }
-        return next();
+        // // Log.trace('Server::echo(..) - params: ' + JSON.stringify(req.params));
+        // try {
+        //     Server.insightFacade.addDataset(req.params.id, req.params.body).then(function (result) {
+        //         // Log.info('Server::echo(..) - responding ' + result.code);
+        //         res.json(result.code, result.body);
+        //     }).catch(function (result) {
+        //         // Log.error('Server::echo(..) - responding CATCH result');
+        //         res.json(result.code, result.body);
+        //     });
+        //
+        // } catch (err) {
+        //     // Log.error('Server::echo(..) - responding 400');
+        //     res.json(400, {error: err.message});
+        // }
+        // return next();
     }
+    //
+    // public static removeDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     // Log.trace('Server::echo(..) - params: ' + JSON.stringify(req.params));
+    //     try {
+    //         Server.insightFacade.removeDataset(req.params.id).then(function (result) {
+    //             // Log.info('Server::echo(..) - responding ' + result.code);
+    //             res.json(result.code, result.body);
+    //         }).catch(function (result) {
+    //             // Log.error('Server::echo(..) - responding CATCH result');
+    //             res.json(result.code, result.body);
+    //         });
+    //
+    //     } catch (err) {
+    //         // Log.error('Server::echo(..) - responding 400');
+    //         res.json(400, {error: err.message});
+    //     }
+    //     return next();
+    // }
 
-    public static removeDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
-        // Log.trace('Server::echo(..) - params: ' + JSON.stringify(req.params));
-        try {
-            Server.insightFacade.removeDataset(req.params.id).then(function (result) {
-                // Log.info('Server::echo(..) - responding ' + result.code);
-                res.json(result.code, result.body);
-            }).catch(function (result) {
-                // Log.error('Server::echo(..) - responding CATCH result');
-                res.json(result.code, result.body);
-            });
-
-        } catch (err) {
-            // Log.error('Server::echo(..) - responding 400');
-            res.json(400, {error: err.message});
-        }
-        return next();
-    }
-
-    public static performQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
-        // Log.trace('Server::echo(..) - params: ' + JSON.stringify(req.params));
-        try {
-            Server.insightFacade.performQuery(req.params.request).then(function (result) {
-                // Log.info('Server::echo(..) - responding ' + result.code);
-                res.json(result.code, result.body);
-            }).catch(function (result) {
-                // Log.error('Server::echo(..) - responding CATCH result');
-                res.json(result.code, result.body);
-            });
-
-        } catch (err) {
-            // Log.error('Server::echo(..) - responding 400');
-            res.json(400, {error: err.message});
-        }
-        return next();
-    }
+    // public static performQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     // Log.trace('Server::echo(..) - params: ' + JSON.stringify(req.params));
+    //     try {
+    //         Server.insightFacade.performQuery(req.params.request).then(function (result) {
+    //             // Log.info('Server::echo(..) - responding ' + result.code);
+    //             res.json(result.code, result.body);
+    //         }).catch(function (result) {
+    //             // Log.error('Server::echo(..) - responding CATCH result');
+    //             res.json(result.code, result.body);
+    //         });
+    //
+    //     } catch (err) {
+    //         // Log.error('Server::echo(..) - responding 400');
+    //         res.json(400, {error: err.message});
+    //     }
+    //     return next();
+    // }
 
 
     // The next two methods handle the echo service.
