@@ -62,69 +62,69 @@ describe("EchoSpec", function () {
     //         });
     // });
 
-    it("Testing POST (performQuery: rooms_lon EQ) Request", function () {
-        //TODO: Use JSON.parse in InsightFacade.performQuery to make it work with REST
-        return chai.request('http://localhost:1234')
-            .post('/query/' + JSON.stringify({
-                    "WHERE": {
-                        "EQ": {
-                            "rooms_lon": -123.24807
+    // it("Testing POST (performQuery: rooms_lon EQ) Request", function () {
+    //     //TODO: Use JSON.parse in InsightFacade.performQuery to make it work with REST
+    //     return chai.request('http://localhost:1234')
+    //         .post('/query/' + JSON.stringify({
+    //                 "WHERE": {
+    //                     "EQ": {
+    //                         "rooms_lon": -123.24807
+    //
+    //                     }
+    //                 },
+    //                 "OPTIONS": {
+    //                     "COLUMNS": [
+    //                         "rooms_name"
+    //                     ],
+    //                     "ORDER": "rooms_name",
+    //                     "FORM": "TABLE"
+    //                 }
+    //             }))
+    //         .then(function (response: InsightResponse) {
+    //             let correctResponse: Object = {
+    //                 "render": "TABLE",
+    //                 "result": [
+    //                     {
+    //                         "rooms_name": "DMP_101"
+    //                     },
+    //                     {
+    //                         "rooms_name": "DMP_110"
+    //                     },
+    //                     {
+    //                         "rooms_name": "DMP_201"
+    //                     },
+    //                     {
+    //                         "rooms_name": "DMP_301"
+    //                     },
+    //                     {
+    //                         "rooms_name": "DMP_310"
+    //                     }
+    //                 ]
+    //             };
+    //             expect(response.body).to.eql(correctResponse);
+    //             return;
+    //         })
+    //         .catch(function (err: any) {
+    //             Log.trace('catch:');
+    //             // some assertions
+    //             console.log(JSON.stringify(err));
+    //             expect.fail();
+    //         });
+    // });
 
-                        }
-                    },
-                    "OPTIONS": {
-                        "COLUMNS": [
-                            "rooms_name"
-                        ],
-                        "ORDER": "rooms_name",
-                        "FORM": "TABLE"
-                    }
-                }))
-            .then(function (response: InsightResponse) {
-                let correctResponse: Object = {
-                    "render": "TABLE",
-                    "result": [
-                        {
-                            "rooms_name": "DMP_101"
-                        },
-                        {
-                            "rooms_name": "DMP_110"
-                        },
-                        {
-                            "rooms_name": "DMP_201"
-                        },
-                        {
-                            "rooms_name": "DMP_301"
-                        },
-                        {
-                            "rooms_name": "DMP_310"
-                        }
-                    ]
-                };
-                expect(response.body).to.eql(correctResponse);
-                return;
-            })
-            .catch(function (err: any) {
-                Log.trace('catch:');
-                // some assertions
-                console.log(JSON.stringify(err));
-                expect.fail();
-            });
-    });
-
-    it("Testing DEL (remove dataset 'rooms') Request", function () {
-        return chai.request('http://localhost:1234')
-            .del('/dataset/rooms')
-            .then(function (res: Response) {
-                Log.trace('then:');
-
-            })
-            .catch(function (err: any) {
-                Log.trace('catch:');
-                // some assertions
-                expect.fail();
-            });
-    });
+    // it("Testing DEL (remove dataset 'rooms') Request", function () {
+    //     return chai.request('http://localhost:1234')
+    //         .del('/dataset/rooms')
+    //         .then(function (res: Response) {
+    //             Log.trace('then:');
+    //
+    //         })
+    //         .catch(function (err: any) {
+    //             Log.trace('catch:');
+    //             // some assertions
+    //             expect.fail();
+    //         });
+    // });
 
     it("GET /", function () {
         return chai.request("http://localhost:1234")
