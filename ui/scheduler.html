@@ -1,0 +1,418 @@
+<html>
+<head>
+	<title>Scheduler</title>
+	
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+	<!-- My code -->
+	<script src="utils.js"></script>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+	
+	<!--jQuery UI-->
+	<link rel="stylesheet" href="jquery-ui/jquery-ui.css">
+	<script src="jquery-ui/jquery-ui.js"></script>
+
+	<!--jQ-Widgets Scheduler-->
+	 <link rel="stylesheet" href="jq-widgets/jqwidgets/styles/jqx.base.css" type="text/css" />
+	<script type="text/javascript" src="jq-widgets/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxdate.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxscheduler.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxscheduler.api.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxdatetimeinput.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxcalendar.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxtooltip.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxwindow.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxnumberinput.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/globalization/globalize.js"></script>
+    <script type="text/javascript" src="jq-widgets/jqwidgets/globalization/globalize.culture.de-DE.js"></script>
+
+
+	<script>
+
+	var selected = {};
+
+
+	$(function(){
+		$( document ).tooltip();
+		populateSelect("buildings", "#filterBuildingOf");
+		selected["dpt"] = {};
+		selected["buildings"] = {};
+		$("#frmSearch").submit(function(e) {
+		    e.preventDefault();
+		});
+	});
+
+	// $(document).ready(function () {
+ //            var appointments = new Array();
+
+ //            var appointment1 = {
+ //                id: "id1",
+ //                description: "George brings projector for presentations.",
+ //                location: "",
+ //                subject: "Quarterly Project Review Meeting",
+ //                calendar: "Room 1",
+ //                start: new Date(2016, 10, 23, 9, 0, 0),
+ //                end: new Date(2016, 10, 23, 12, 30, 0)
+ //            }
+
+ //            var appointment2 = {
+ //                id: "id2",
+ //                description: "",
+ //                location: "",
+ //                subject: "IT Group Mtg.",
+ //                calendar: "Room 2",
+ //                start: new Date(2016, 10, 24, 10, 0, 0),
+ //                end: new Date(2016, 10, 24, 15, 0, 0)
+ //            }
+
+ //            var appointment3 = {
+ //                id: "id3",
+ //                description: "",
+ //                location: "",
+ //                subject: "Course Social Media",
+ //                calendar: "Room 3",
+ //                start: new Date(2016, 10, 27, 11, 0, 0),
+ //                end: new Date(2016, 10, 27, 13, 0, 0)
+ //            }
+
+ //            var appointment4 = {
+ //                id: "id4",
+ //                description: "",
+ //                location: "",
+ //                subject: "New Projects Planning",
+ //                calendar: "Room 2",
+ //                start: new Date(2016, 10, 23, 16, 0, 0),
+ //                end: new Date(2016, 10, 23, 18, 0, 0)
+ //            }
+
+ //            var appointment5 = {
+ //                id: "id5",
+ //                description: "",
+ //                location: "",
+ //                subject: "Interview with James",
+ //                calendar: "Room 1",
+ //                start: new Date(2016, 10, 25, 15, 0, 0),
+ //                end: new Date(2016, 10, 25, 17, 0, 0)
+ //            }
+
+ //            var appointment6 = {
+ //                id: "id6",
+ //                description: "",
+ //                location: "",
+ //                subject: "Interview with Nancy",
+ //                calendar: "Room 4",
+ //                start: new Date(2016, 10, 26, 14, 0, 0),
+ //                end: new Date(2016, 10, 26, 16, 0, 0)
+ //            }
+ //            appointments.push(appointment1);
+ //            appointments.push(appointment2);
+ //            appointments.push(appointment3);
+ //            appointments.push(appointment4);
+ //            appointments.push(appointment5);
+ //            appointments.push(appointment6);
+
+ //            // prepare the data
+ //            var source =
+ //            {
+ //                dataType: "array",
+ //                dataFields: [
+ //                    { name: 'id', type: 'string' },
+ //                    { name: 'description', type: 'string' },
+ //                    { name: 'location', type: 'string' },
+ //                    { name: 'subject', type: 'string' },
+ //                    { name: 'calendar', type: 'string' },
+ //                    { name: 'start', type: 'date' },
+ //                    { name: 'end', type: 'date' }
+ //                ],
+ //                id: 'id',
+ //                localData: appointments
+ //            };
+ //            var adapter = new $.jqx.dataAdapter(source);
+ //            $("#scheduler").jqxScheduler({
+ //                date: new $.jqx.date(2016, 11, 23),
+ //                width: 850,
+ //                height: 600,
+ //                source: adapter,
+ //                view: 'weekView',
+ //                showLegend: true,
+ //                ready: function () {
+ //                    $("#scheduler").jqxScheduler('ensureAppointmentVisible', 'id1');
+ //                },
+ //                resources:
+ //                {
+ //                    colorScheme: "scheme05",
+ //                    dataField: "calendar",
+ //                    source:  new $.jqx.dataAdapter(source)
+ //                },
+ //                appointmentDataFields:
+ //                {
+ //                    from: "start",
+ //                    to: "end",
+ //                    id: "id",
+ //                    description: "description",
+ //                    location: "location",
+ //                    subject: "subject",
+ //                    resourceId: "calendar"
+ //                },
+ //                views:
+ //                [
+ //                    'dayView',
+ //                    'weekView',
+ //                    'monthView'
+ //                ]
+ //            });
+ //        });
+	
+	function doSearch(){
+		var url_0 = "xml/performSchedule/" + JSON.stringify(selected);
+		alert(url_0);
+		$.ajax({
+			url: url_0,
+			cache: false,
+			success: function(html){
+				alert(html);
+			}
+		});
+	}
+	function filterByBuildingRange(){
+		//TODO: MUST REFRESH COMBOBOX
+		var params = {};
+		params["meters"] = $("#filterBuildingRange").val();
+		params["building"] = [];
+
+		$("option:selected", "#filterBuildingOf").each(function (index, element){
+			params["building"].push($(this).text());
+		});
+		
+ 		
+		var url_0 = "xml/buildingsInRange/" + JSON.stringify(params);
+		alert(url_0);
+		$.ajax({
+			url: url_0,
+			cache: false,
+			success: function(jsonString){
+				$("#filterBuildingOf").empty();
+				// var obj = JSON.parse(jsonString);
+				alert(jsonString);
+			}
+		});
+
+
+	}
+
+	function buildQuery(){
+
+	}
+	
+	//Dataset: 	"buildings" for rooms dataset
+	//			"dpt" for courses dataset
+	function addSelectedCourses(dataset){
+		var selectOuter = "";
+		var selectInner = "";
+		var tableId = ""; //TODO!
+
+		if(dataset == "buildings"){
+			selectOuter = "#selectBuilding";
+			selectInner = "#selectRoom";
+			tableId = "#selectedRooms";
+		}else if(dataset == "dpt"){
+			selectOuter = "#selectDpt";
+			selectInner = "#selectCourse";
+			tableId = "#selectedCourses";
+		}
+
+		$("option:selected", selectOuter).each(function (index, element){
+			var curDpt = $(this).text();
+			
+			if(selected[dataset][curDpt] == null){
+				selected[dataset][curDpt] = [];
+				
+			}
+
+			$("option:selected", selectInner).each(function (){
+				var curSelected = $(this).text();
+				if(!selected[dataset][curDpt].includes(curSelected)){
+					selected[dataset][curDpt].push(curSelected);
+				}
+			});			
+		});
+
+		refreshSelectedCoursesTbl(dataset, tableId);
+	}
+
+	function removeRow(element, dataset, tableId){
+		var dptOrBuildingName = element;
+		delete selected[dataset][dptOrBuildingName];
+		refreshSelectedCoursesTbl(dataset, tableId);
+
+	}
+
+	function refreshSelectedCoursesTbl(dataset, tableId){
+
+		$(tableId + " tr:gt(0)").remove();
+
+		Object.keys(selected[dataset]).forEach(function (key){
+			
+			var buttonComment = '<button class="ui-button ui-corner-all ui-widget ui-button-icon-only" title="' + selected[dataset][key].join(", ") + '"><span class="ui-button-icon ui-icon ui-icon-comment"></span><span class="ui-button-icon-space"> </span>Button with icon only</button>';
+			
+			var buttonRemove = '<button id="' + key + '" class="ui-button ui-corner-all ui-widget ui-button-icon-only" onclick="removeRow($(this).attr(\'id\'), \'' + dataset + '\', \'' + tableId + '\')" title=""><span class="ui-button-icon ui-icon ui-icon-circle-close"></span><span class="ui-button-icon-space"> </span>Button with icon only</button>';
+
+			var markup = "<tr><td>" + key + "</td><td>" + buttonComment + "</td><td>" + buttonRemove + "</td></tr>";
+            $(tableId + " tbody").append(markup);
+		});
+	}
+	function addSelectedRooms(){
+
+	}
+	function refreshSelectedRoomsTbl(){
+
+	}
+	function showBuildingFilter(){
+		$("#buildingFilter").show();
+	}
+	function showCoursesFilter(){
+		$("#coursesFilter").show();
+	}
+
+	function filterSelectBy(selectId, inputId, splitUnderscore=false){
+		var searchStr = "^" + $(inputId).val() + ".*$";
+		var re = new RegExp(searchStr, "i");
+		
+		$(selectId + " option").each(function (){
+			var curOptionStr = $(this).text();
+			if(!re.test(curOptionStr)){
+				$(this).remove();
+
+
+			}   
+		});
+	}
+	function filterSelectBy2(selectId, inputId, splitUnderscore=false){
+		$(selectId + " option").remove();
+		var searchStr = "^" + $(inputId).val() + ".*$";
+		var re = new RegExp(searchStr, "i");
+		
+		// Object.keys(list[dptOrBuildings][searchKey]).forEach(function (key){
+		// }
+		
+		// $(selectId + " option").each(function (){
+		// 	var curOptionStr = $(this).text();
+		// 	if(!re.test(curOptionStr)){
+		// 		$(this).remove();
+		// 	}   
+		// });
+	}
+
+	
+
+	
+	</script>
+</head>
+<body background="style/1.png">
+	<div id="wrapper" style="width:800px;margin:auto;" align="center">
+		<h1>Scheduler</h1>
+
+		<form action="#" id="frmSearch" onsubmit="return doSearch();">
+			<div>
+				<div style="display:inline-block;">Departments <a href="#" id="dptShowAll" class="showAll"  onclick="selectShowAll('selectDpt')">[Show all]</a><br><select id="selectDpt" class="selectOptions" multiple></select></div>
+
+				<div style="padding-left:20px; display:inline-block;">Courses <a href="#" id="courseShowAll" class="showAll"  onclick="return selectShowAll('selectCourse')">[Show all]</a><br><select id="selectCourse" class="selectOptions" multiple><option value="all">ALL</option></select></div>
+
+				<p><button type="button" class="ui-button ui-widget ui-corner-all" onclick="addSelectedCourses('dpt')">[+] Add selected to search</button></p>
+				<a onclick="showBuildingFilter()" href="#">Filter options</a>
+
+				<!--COURSES FILTER OPTIONS-->
+				<div style="display:block;" id="coursesFilter">
+
+					<br>
+					Filter by department: <input type="text" id="filterDptName"><button onclick="return filterSelectBy('#selectDpt', '#filterDptName')" class="btnApply">Apply</button>
+					<br>
+					<br>
+					Filter by course number: <input type="text" id="filterCourseNum"><button onclick="return filterSelectBy('#selectCourse', '#filterCourseNum')" class="btnApply">Apply</button>
+
+				</div>
+
+				<br>
+				<div id="selectedCoursesDiv">
+					<h3>Selected Courses</h3>
+					<table id="selectedCourses" style="width:100%;">
+						<tr>
+							<th>Department</th>
+							<th>Courses</th>
+							<th>Remove</th>
+						</tr>
+					</table>
+				</div>
+
+			</div>
+			<br>
+			<hr>
+			<br>
+			<div>
+				<div style="display:inline-block;">Buildings <a href="#" id="buildingShowAll" class="showAll"  onclick="selectShowAll('selectBuilding')">[Show all]</a><br><select id="selectBuilding" class="selectOptions" multiple></select></div>
+
+				<div style="padding-left:20px; display:inline-block;">Rooms <a href="#" id="roomShowAll" class="showAll"  onclick="selectShowAll('selectRoom')">[Show all]</a><br><select id="selectRoom" class="selectOptions" multiple><option value="all">ALL</option></select></div>
+				
+				<p><button class="ui-button ui-widget ui-corner-all" type="button" onclick="addSelectedCourses('buildings')">[+] Add selected to search</button></p>
+				<a onclick="showBuildingFilter()" href="#">Filter options</a>
+				<br>
+
+				<!--BUILDING FILTER-->
+				<div style="display:block;" id="buildingFilter">
+					
+	
+					<!--DISTANCE FROM BUILDING-->
+					<br>
+					Filter all buildings within 
+					<input type="text" id="filterBuildingRange" style="width:50px"> meters of:<br>
+					<select multiple style="width:175px;height:100px" id="filterBuildingOf"></select>
+					<br>
+					<button onclick="return filterByBuildingRange()" style="width:175px" class="btnApply">Apply</button>
+
+					<!--FILTER BY BUILDING NAME-->
+					<br><br>
+					Filter by building name: <input type="text" id="filterBuildingName"><button onclick="return filterSelectBy('#selectBuilding', '#filterBuildingName')" class="btnApply">Apply</button>
+				</div>
+
+				<div id="selectedRoomsDiv">
+					<h3>Selected Rooms</h3>
+					<table id="selectedRooms" style="width:100%;">
+						<tr>
+							<th>Building</th>
+							<th>Rooms</th>
+							<th>Remove</th>
+						</tr>
+					</table>
+				</div>
+
+			</div>
+			<br>	
+			<input class="ui-button ui-widget ui-corner-all" type="submit" value="Search" style="width:25%">
+		</form>
+		<hr>
+		<h2>Result</h2>
+		<div style="display:block">
+			
+			<h3 style="display:inline">Quality: </h3><h3 id="qualityScore" style="display:inline-block;">XX%</h3>
+			<br>
+			<a href="">Show buildings on Google Map</a>
+			<br>
+			<div id="scheduler"></div>
+			
+		</div>
+	</div>
+	
+</body>
+</body>
+</html>

@@ -1,0 +1,1 @@
+To build and launch the UI, simply start the server using "yarn start" and then navigate to http://localhost:4321/index.html (must have index.html appended to the end).

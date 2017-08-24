@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<!--TODO: NOT OPERATOR-->
+<head>
+	<title>Courses Explorer</title>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<link rel="stylesheet" href="jquery-ui/jquery-ui.css">
+	<script src="jquery-ui/jquery-ui.js"></script>
+	<script src="utils.js"></script>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+	<style>
+		table thread {
+			display: table-header-group;
+		}
+	</style>
+	<script>
+		var uiPage = "courses";
+		var performSC = [];
+		var performMC = [];
+		var datasetParams = [];
+		assignPerformArrays();
+		$(function(){
+			populateParamFields();
+			if(uiPage == "rooms"){
+				$("#roomsSearch").show();
+			}else if(uiPage == "courses"){
+				$("#coursesSearch").show();
+			}
+			$("#frmSearch").submit(function(e) {
+			    e.preventDefault();
+			});
+		});
+
+		//Populate Operator field
+		$(document).on('change',".allSearchParam", function(){
+    		var selected = $("option:selected", this).text();
+    		$(this).parent().parent().find(".allSearchOp").empty();
+    		if(performSC.includes(selected)){
+    			$(this).parent().parent().find(".allSearchOp").append($('<option>', {
+			    	text: "IS"
+				}));
+    		}else if(performMC.includes(selected)){
+    			$(this).parent().parent().find(".allSearchOp").append($('<option>', {
+			    	text: ">"
+				})).append($('<option>', {
+			    	text: "<"
+				})).append($('<option>', {
+			    	text: "="
+				}));
+    		}
+		}); 
+
+		function doSearch(){
+			var queryObj = constructQuery();
+			var url_0 = "xml/performExplore/" + JSON.stringify(queryObj);
+			$.ajax({
+				url: url_0,
+
+				cache: false,
+				success: function(jsonObj){
+					//http://jsfiddle.net/X6TZt/79/
+					// if(jsonObj.code);
+
+					// alert(JSON.stringify(jsonObj));
+					
+					if(jsonObj.render != undefined || jsonObj.render != null){
+						$("#results").show();
+						$("#tblResults").empty();
+
+						var columnAry = [];
+						$("#columnShowSel option").each(function (){
+							columnAry.push($(this).text());
+						});
+						$("#tblResults").append("<thread></thread>");
+						$("#tblResults thread").append("<tr></tr>")
+						$("#tblResults").append("<tbody></tbody>");	
+						
+				        var curRow;
+				        var curCol;
+				        for (i = 0; i < columnAry.length; i++) {
+				            curCol = $("<th>" + columnAry[i] + "</th>");
+				            $("#tblResults thread tr").append(curCol);				          
+				        }
+
+				        
+
+				        for (x = 0; x < jsonObj.result.length; x++) {
+				        	curRow = $("<tr></tr>");
+				        	var subResult = jsonObj.result[x];
+				        	Object.keys(subResult).forEach(function (key){
+				        		curRow.append($("<td>" + subResult[key] + "</td>"));
+				        	});
+				        	$("#tblResults tbody").append(curRow);		         
+			            }
+			            
+			            
+					}
+				}
+			});
+		}
+
+		function populateParamFields(allOrOne = "all"){
+			if(allOrOne == "all"){
+
+				var comboboxIds = [".allSearchParam", "#optionsOrder", "#columnAddSel"];
+				for(var i = 0; i < comboboxIds.length; i++){
+					for(var x = 0; x < datasetParams.length; x++){
+						$(comboboxIds[i]).append($('<option>', {
+				    		text: datasetParams[x]
+						}));
+					}
+				}
+			}else{
+				for(var x = 0; x < datasetParams.length; x++){
+						$(allOrOne).append($('<option>', {
+				    		text: datasetParams[x]
+						}));
+				}
+			}
+			
+		}
+
+		function constructQuery(){
+		/*
+				{
+            "WHERE": {
+                "OR":[
+                    {
+                        "AND":[
+                            {
+                                "IS":{
+                                    "courses_dept": "econ"
+                                }
+                            },
+                            {
+                                "IS": {
+                                    "courses_id": "601"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "AND":[
+                            {
+                                "IS":{
+                                    "courses_dept":"sowk"
+                                }
+                            },
+                            {
+                                "IS": {
+                                    "courses_id": "601"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }, "OPTIONS": {
+                "COLUMNS": [
+                    "courses_dept",
+                    "courses_id",
+                    "courses_uuid"
+                ],
+                "ORDER": "courses_uuid",
+                "FORM": "TABLE"
+            }
+        */
+
+
+        	var query = {};
+        	
+			var whereObj = {};
+			var whereParams = [];
+			var whereSearchOperators = [];
+			var whereValues = [];
+			var columns = [];
+			var conjunctionOp = "NONE";
+
+			var notParams = [];
+
+			var convertedWhereParams;
+
+			if($("#rdo_and").is(":checked")){
+				conjunctionOp = "AND";
+				convertedWhereParams = {};
+			}else if($("#rdo_or").is(":checked")){
+				conjunctionOp = "OR";
+				convertedWhereParams = {};
+			}else{
+				convertedWhereParams = [];
+			}
+
+			$(".allSearchParam").each(function (){
+				whereParams.push($("option:selected", this).text());
+			});
+
+			//NOT OPERATOR
+			$(".paramNot").each(function (){
+				notParams.push($(this).prop("checked"));
+			});
+
+			$(".allSearchOp").each(function (){
+				var curSearchOp = $("option:selected", this).text();
+				if(curSearchOp == "="){
+					curSearchOp = "EQ"
+				}else if(curSearchOp == ">"){
+					curSearchOp = "GT"
+				}else if(curSearchOp == "<"){
+					curSearchOp = "LT"
+				}
+				whereSearchOperators.push(curSearchOp);
+			});
+
+			var xy = 0;
+			$(".allSearchVal").each(function (){
+				var curVal = $(this).val();
+				
+				if(typeConvert["numbers"].includes(whereParams[xy])){
+					curVal = parseInt(curVal);
+				}
+				xy++;
+				whereValues.push(curVal);
+			});
+			
+
+			$("#columnShowSel option").each(function (){
+				columns.push($(this).val());
+			});
+
+
+			var tempAry = [];
+
+			for(var i=0; i < whereParams.length; i++){
+				var curParam = whereParams[i];
+				if(curParam == "" || curParam == null){
+					continue;
+				}
+				var curOp = whereSearchOperators[i];
+				var curPair = {};
+				curPair[curParam] = whereValues[i];
+				var curPairOp = {};
+				curPairOp[curOp] = curPair;
+
+				if(notParams[i] == true){
+					var tempCurPairOp = curPairOp;
+
+					curPairOp = {};
+					curPairOp["NOT"] = tempCurPairOp;
+					//alert(curPairOp);
+				}
+				tempAry.push(curPairOp);
+
+			}
+			if(whereParams.length == 1){
+				tempAry = tempAry[0];
+			}
+	
+			if(conjunctionOp != "NONE"){
+				convertedWhereParams[conjunctionOp] = tempAry;
+
+				if($("#conjunctionNot").prop("checked") == true){
+					var tempObj = convertedWhereParams;
+					convertedWhereParams = {};
+					convertedWhereParams["NOT"] = tempObj;
+					// alert(JSON.stringify(convertedWhereParams));
+				}
+
+			}else{
+				convertedWhereParams = tempAry;
+			}
+			
+			
+			query["WHERE"] = convertedWhereParams;
+			query["OPTIONS"] = {};
+			query["OPTIONS"]["COLUMNS"] = queryBuilder_getColumns();
+			tempAry = [];
+			$("#columnShowSel > option").each(function() {
+			    tempAry.push(this.text);
+
+			});
+			query["OPTIONS"]["COLUMNS"] = tempAry;
+
+			var order = $("#optionsOrder :selected").text();
+			if(order != "None"){
+				query["OPTIONS"]["ORDER"] = order;
+			}
+        	query["OPTIONS"]["FORM"] = "TABLE";
+			// alert(JSON.stringify(query));  //TODO: NOT operator, columns
+			return query;
+			//alert(where);
+			// alert(whereSearchOperators);
+			// alert(whereValues);
+			// alert(columns);
+		}
+
+		//returns a string array of the requested columns as a string 
+		function queryBuilder_getColumns(){
+
+		}
+ 
+
+		function addColumn(){
+			$('#columnShowSel').append($('<option>', {
+			    text: $("#columnAddSel :selected").text()
+			}));
+		}
+
+		function assignPerformArrays(){
+			if(uiPage == "rooms"){
+				datasetParams = ["rooms_fullname", "rooms_shortname", "rooms_number", "rooms_name","rooms_address", "rooms_type", "rooms_furniture", "rooms_href", "rooms_lat", "rooms_lon", "rooms_seats"];
+				performSC = ["rooms_fullname", "rooms_shortname", "rooms_number", "rooms_name","rooms_address", "rooms_type", "rooms_furniture", "rooms_href"];
+				performMC = ["rooms_lat", "rooms_lon", "rooms_seats"];
+			}else if(uiPage == "courses"){
+				datasetParams = ["courses_dept", "courses_id", "courses_instructor", "courses_title", "courses_uuid", "courses_avg", "courses_pass", "courses_fail", "courses_audit", "courses_year"];
+				performSC = ["courses_dept", "courses_id", "courses_instructor", "courses_title", "courses_uuid"];
+				performMC = ["courses_avg", "courses_pass", "courses_fail", "courses_audit", "courses_year"];
+			}
+		}
+		function removeSelectedColumn(){
+			$("#columnShowSel option:selected").remove();
+		}
+		function addSearchParam(){
+			$("#searchCriteria").append( '<br><div class="aCriteria" style="display:block;"> <div class="aParam" style="display:inline;"> Parameter: <select style="width:115px" class="allSearchParam"> <option value="default"></option></select> </div><div style="padding-left:50px;display:inline;"><input type="checkbox" name="not" class="paramNot">NOT</div><div class="aParamOp" style="display:inline;padding-left:50px;">Operator: <select style="width:50px;display:inline;padding-left:50px"; class="allSearchOp"></select></div><div class="aParamValue" style="display:inline;padding-left:50px;">Value: <input type="text" style="width:115px;" name="searchParamVal" class="allSearchVal"></div></div>');
+			
+			populateParamFields($(".allSearchParam").last());
+			$("#andOrDiv").show();
+			if($("#rdo_and").is(":checked") == false){
+				if($("#rdo_or").is(":checked") == false){
+					$("#rdo_and").prop("checked", true);
+				}
+			}
+		}
+	</script>
+</head>
+<body background="style/1.png">
+	<div id="wrapper" style="width:800px;margin:auto;" align="center">
+	<form onsubmit="return doSearch();" id="frmSearch" action="#">
+	<div>
+		<h1>Explore Courses</h1>
+		<br>
+		<div id="coursesSearch" style="display:none">
+
+			<div style="display:inline-block;">Departments <a href="#" id="dptShowAll" class="showAll"  onclick="selectShowAll('selectDpt')">[Show all]</a><br><select id="selectDpt" class="selectOptions" multiple></select></div>
+				
+			<div style="padding-left:20px; display:inline-block;">Courses <a href="#" id="courseShowAll" class="showAll"  onclick="return selectShowAll('selectCourse')">[Show all]</a><br><select id="selectCourse" class="selectOptions" multiple><option value="all">ALL</option></select></div>
+		
+		</div>
+		
+		<div id="roomsSearch" style="display:none">
+			<div style="display:inline-block;">Buildings <a href="#" id="buildingShowAll" class="showAll"  onclick="selectShowAll('selectBuilding')">[Show all]</a><br><select id="selectBuilding" class="selectOptions" multiple></select></div>
+
+			<div style="padding-left:20px; display:inline-block;">Rooms <a href="#" id="roomShowAll" class="showAll"  onclick="selectShowAll('selectRoom')">[Show all]</a><br><select id="selectRoom" class="selectOptions" multiple><option value="all">ALL</option></select></div>
+		</div>
+		<br>
+		<br>
+		<hr>
+		<h3>Search Criteria Parameters (WHERE):</h3>
+		<div id="searchCriteria" width=100%>
+		<!-- SEARCH PARAMETERS -->
+			 <br><div class="aCriteria" style="display:block;"> <div class="aParam" style="display:inline;"> Parameter: <select style="width:115px" class="allSearchParam"> <option value="default"></option></select> </div><div style="padding-left:50px;display:inline;"><input type="checkbox" name="not" class="paramNot">NOT</div><div class="aParamOp" style="display:inline;padding-left:50px;">Operator: <select style="width:50px;display:inline;padding-left:50px"; class="allSearchOp"></select></div><div class="aParamValue" style="display:inline;padding-left:50px;">Value: <input type="text" style="width:115px;" name="searchParamVal" class="allSearchVal"></div></div>
+
+
+		</div>
+
+
+		
+		<br>
+		<div id="andOrDiv" style="display:none;">
+		<input type="checkbox" name="not" id="conjunctionNot">NOT
+		<input type="radio" name="andOr" value="and" id="rdo_and">AND
+		<input type="radio" name="andOr" value="or" id="rdo_or">OR
+		</div>
+		<p><button class="ui-button ui-widget ui-corner-all" type="button" onclick="addSearchParam()">[+] Add another search parameter</button></p>
+		<hr>
+		<br>
+		<div>Order: <select style="width:175px" id="optionsOrder"><option value="all">None</option></select></div>
+		<h3>Columns to show</h3>
+		<select style="width:50%" id="columnAddSel">
+			<option value="default">[Select column to add...]</option>
+			
+		</select>
+		<button type="button" style="width:50%;float:right;" onclick="addColumn()">[+] Add another column</button>
+
+		<select style="width:100%;height:300px;" id="columnShowSel" multiple>
+		</select>
+		
+		<br>
+		<button type="button" onclick="removeSelectedColumn()" style="width:100%">[-] Remove selected column</button>
+
+
+		</p>
+		<br>
+		<input class="ui-button ui-widget ui-corner-all" type="submit" value="Search" style="width:100%">
+
+		
+	</div>
+	</form>
+	<br>
+	<hr>
+
+	<div id="results" style="display:none;">
+		<h1>Results</h1>
+			<table id="tblResults" border="1">
+				
+				
+			</table>
+	</div>
+</div>
+</body>
+</html>

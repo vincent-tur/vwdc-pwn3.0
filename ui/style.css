@@ -1,0 +1,27 @@
+#contenttable2scheduler{
+	display:none !important;
+}
+#toolbarscheduler{
+	display:none;
+}
+div.ui-tooltip {
+    max-width: 750px;
+    word-wrap: break-word;
+}
+label {
+	display: inline-block;
+	width: 5em;
+}
+.selectOptions{
+	width: 175px;
+	height: 125px;
+}
+.btnApply{
+	left:20px;
+}
+td {
+	text-align: center;
+}
+.showAll{
+	display:none;
+}
