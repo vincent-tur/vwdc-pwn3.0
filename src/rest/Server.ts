@@ -124,39 +124,39 @@ export default class Server {
 
 
 
-    public static startUp_addDatasets(){
-        var path = require("path");
-        var fs = require("fs");
-        var zipPath: string = path.join(__dirname, '../', 'roomsFULL.zip');
-        var zipPath1 = path.join(__dirname, '../', 'coursesFULL.zip');
-        let options = {encoding: "base64"};
-
-        fs.readFile(zipPath, options, function (err: any, base64data: any) {
-            if (err) {
-                console.log("ERROR ADDING ROOMS\n");
-                return;
-            }
-            Server.insightFacade.addDataset('rooms', base64data).then(function () {
-                fs.readFile(zipPath1, options, function (err: any, base64data_2: any) {
-                    if (err) {
-                        console.log("ERROR ADDING COURSES\n");
-                        return;
-                    }
-                    Server.insightFacade.addDataset('courses', base64data_2).then(function () {
-                        Log.info("App::initServer() - Finished adding datasets");
-                        return;
-
-                    }).catch(function () {
-                        console.log("CATCH: addDataset courses\n");
-                        return;
-                    });
-                });
-            }).catch(function (e) {
-                console.log("CATCH: addDataset rooms\n");
-                return;
-            });
-        });
-    }
+    // public static startUp_addDatasets(){
+    //     var path = require("path");
+    //     var fs = require("fs");
+    //     var zipPath: string = path.join(__dirname, '../', 'roomsFULL.zip');
+    //     var zipPath1 = path.join(__dirname, '../', 'coursesFULL.zip');
+    //     let options = {encoding: "base64"};
+    //
+    //     fs.readFile(zipPath, options, function (err: any, base64data: any) {
+    //         if (err) {
+    //             console.log("ERROR ADDING ROOMS\n");
+    //             return;
+    //         }
+    //         Server.insightFacade.addDataset('rooms', base64data).then(function () {
+    //             fs.readFile(zipPath1, options, function (err: any, base64data_2: any) {
+    //                 if (err) {
+    //                     console.log("ERROR ADDING COURSES\n");
+    //                     return;
+    //                 }
+    //                 Server.insightFacade.addDataset('courses', base64data_2).then(function () {
+    //                     Log.info("App::initServer() - Finished adding datasets");
+    //                     return;
+    //
+    //                 }).catch(function () {
+    //                     console.log("CATCH: addDataset courses\n");
+    //                     return;
+    //                 });
+    //             });
+    //         }).catch(function (e) {
+    //             console.log("CATCH: addDataset rooms\n");
+    //             return;
+    //         });
+    //     });
+    // }
 
     public static performExplore(req: restify.Request, res: restify.Response, next: restify.Next) {
         try {

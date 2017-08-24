@@ -17,7 +17,7 @@ describe("EchoSpec", function () {
 
     this.timeout(1000000);
     var path = require("path");
-    var zipPath: string = path.join(__dirname, '../', 'src/roomsFULL.zip');
+    // var zipPath: string = path.join(__dirname, '../', 'src/roomsFULL.zip');
 
     function sanityCheck(response: InsightResponse) {
         expect(response).to.have.property('code');
@@ -46,21 +46,21 @@ describe("EchoSpec", function () {
     });
 
 
-    it("Testing PUT (add dataset 'rooms') Request", function () {
-        return chai.request('http://localhost:1234')
-            .put('/dataset/rooms')
-            .attach("body", fs.readFileSync(zipPath), 'roomsFULL.zip')
-            .then(function (res: Response) {
-                Log.trace('then:');
-                expect(res.statusCode).to.equal(204);
-                // some assertions
-            })
-            .catch(function (err: any) {
-                Log.trace('catch:');
-                // some assertions
-                expect.fail();
-            });
-    });
+    // it("Testing PUT (add dataset 'rooms') Request", function () {
+    //     return chai.request('http://localhost:1234')
+    //         .put('/dataset/rooms')
+    //         .attach("body", fs.readFileSync(zipPath), 'roomsFULL.zip')
+    //         .then(function (res: Response) {
+    //             Log.trace('then:');
+    //             expect(res.statusCode).to.equal(204);
+    //             // some assertions
+    //         })
+    //         .catch(function (err: any) {
+    //             Log.trace('catch:');
+    //             // some assertions
+    //             expect.fail();
+    //         });
+    // });
 
     it("Testing POST (performQuery: rooms_lon EQ) Request", function () {
         //TODO: Use JSON.parse in InsightFacade.performQuery to make it work with REST
