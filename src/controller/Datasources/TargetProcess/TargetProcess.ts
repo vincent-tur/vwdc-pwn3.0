@@ -26,6 +26,7 @@ export default class TargetProcess extends Datasource{
         })).then(values => {
             this.dataObj = values;
         }, reason => {
+
             console.log(reason);
         });
        return getDatasources;

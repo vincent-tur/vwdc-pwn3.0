@@ -50,6 +50,7 @@ describe("Debug [vwdc-pwn3.0] Spec", function () {
         return chai.request("http://localhost:1234")
             .get('/')
             .then(function (res: Response) {
+                console.log('get funky');
             })
             .catch(function () {
                 expect.fail();
