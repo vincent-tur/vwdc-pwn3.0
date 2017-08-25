@@ -4,7 +4,10 @@
 
 
 export default class Backend{
+
     constructor() {
         console.log('InsightFacadeImpl::init()');
     }
+
+
 }

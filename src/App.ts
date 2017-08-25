@@ -11,11 +11,11 @@ export class App {
 
 
     public initServer(port: number) {
-        console.log('App::initServer( ' + port + ' ) - start');
+        console.log('App::initServer( ' + port + ' ) - Starting...');
 
         let s = new Server(port);
         s.start().then(function (val: boolean) {
-            console.log("App::initServer() - loading datasets...");
+            console.log("App::initServer( ' + port + ' ) - Started :)")
         }).catch(function (err: Error) {
             console.log("App::initServer() - ERROR: " + err.message);
         });

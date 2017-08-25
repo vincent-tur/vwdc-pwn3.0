@@ -4,15 +4,16 @@
 
 import Server from "../src/rest/Server";
 import {expect} from 'chai';
-
+import Toggl from '../src/controller/Datasources/Toggl/Toggl';
 import {Response} from "restify";
+import TargetProcess from "../src/controller/Datasources/TargetProcess/TargetProcess";
 
-describe("EchoSpec", function () {
-    //TODO:https://piazza.com/class/iw1iu9xgfam11a?cid=1743
+describe("Debug [vwdc-pwn3.0] Spec", function () {
     var s: Server;
-    var fs = require("fs");
     var chai = require('chai'), chaiHttp = require('chai-http');
     this.timeout(1000000);
+
+    var fs = require("fs");
     var path = require("path");
 
 
@@ -35,6 +36,34 @@ describe("EchoSpec", function () {
         console.log('After: ' + (<any>this).test.parent.title);
     });
 
+
+    it("3.0 First Test - Toggl", function () {
+        let tgl = new Toggl();
+        return tgl.getData();
+    });
+    it("3.0 First Test - TargetProcess", function () {
+        let tp = new TargetProcess();
+        return tp.getData();
+    });
+
+    it("GET /", function () {
+        return chai.request("http://localhost:1234")
+            .get('/')
+            .then(function (res: Response) {
+            })
+            .catch(function () {
+                expect.fail();
+            });
+    });
+    it("GET /echo/:msg test", function () {
+        return chai.request("http://localhost:1234")
+            .get('/echo/hello')
+            .then(function (res: Response) {
+            })
+            .catch(function () {
+                expect.fail();
+            });
+    });
 
     // it("Testing PUT (add dataset 'rooms') Request", function () {
     //     return chai.request('http://localhost:1234')
@@ -113,25 +142,4 @@ describe("EchoSpec", function () {
     //             expect.fail();
     //         });
     // });
-
-    it("GET /", function () {
-        return chai.request("http://localhost:1234")
-            .get('/')
-            .then(function (res: Response) {
-            })
-            .catch(function () {
-                expect.fail();
-            });
-    });
-    it("GET /echo/:msg test", function () {
-        return chai.request("http://localhost:1234")
-            .get('/echo/hello')
-            .then(function (res: Response) {
-            })
-            .catch(function () {
-                expect.fail();
-            });
-    });
-
-
 });
