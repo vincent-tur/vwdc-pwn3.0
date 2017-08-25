@@ -1,30 +1,35 @@
-export abstract class Datasource {
-    abstract dataObj: {};
-    abstract dataUrlParams: {[paramName: string] : string};
-    abstract dataUrlBase: string;
+export class Datasource {
+    dataObj: {};
+    dataUrlParams: {[paramName: string] : string};
+    dataUrlBase: string;
 
 
-    constructor(dataUrlBase: string = ''){
+    constructor(datasourceFullUrl = ''){
         this.dataObj = {};
-        this.dataUrlBase = dataUrlBase;
-        this.dataUrlParams = {}
+        this.dataUrlBase = datasourceFullUrl;
+        this.dataUrlParams = {};
     }
 
-    abstract getURL(): {};
+    getURL(): any{
+        return this.dataUrlBase;
+    };
 
-    getData(): Promise<any> {
+    getData() {
         var that = this;
 
         return new Promise(function (fulfill, reject){
             var request = require('request');
             var url = that.getURL();
             request(url, function (error: any, response: any, body: any) {
-                that.dataObj = JSON.parse(body);
+                 that.dataObj = JSON.parse(body);
 
                 if(that.dataObj == {}){
                     reject("Received no data. URL attempt: " + url)
                 }else{
-                    fulfill();
+                    fulfill({
+                        data: that.dataObj,
+                        url: url
+                    });
                 }
 
                 // console.log('error:', error); // Print the error if one occurred

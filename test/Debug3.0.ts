@@ -37,10 +37,10 @@ describe("Debug [vwdc-pwn3.0] Spec", function () {
     });
 
 
-    it("3.0 First Test - Toggl", function () {
-        let tgl = new Toggl();
-        return tgl.getData();
-    });
+    // it("3.0 First Test - Toggl", function () {
+    //     let tgl = new Toggl();
+    //     return tgl.getData();
+    // });
     it("3.0 First Test - TargetProcess", function () {
         let tp = new TargetProcess();
         return tp.getData();

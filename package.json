@@ -10,6 +10,7 @@
   "keywords": [],
   "version": "0.2.0",
   "devDependencies": {
+    "build-url": "^1.0.10",
     "chai": "^3.5.0",
     "chai-http": "^3.0.0"
   },
