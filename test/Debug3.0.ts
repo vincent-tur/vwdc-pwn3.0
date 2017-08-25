@@ -4,9 +4,7 @@
 
 import Server from "../src/rest/Server";
 import {expect} from 'chai';
-import Log from "../src/Util";
-import {InsightResponse} from "../src/controller/IInsightFacade";
-import {App} from "../src/App";
+
 import {Response} from "restify";
 
 describe("EchoSpec", function () {
@@ -14,26 +12,18 @@ describe("EchoSpec", function () {
     var s: Server;
     var fs = require("fs");
     var chai = require('chai'), chaiHttp = require('chai-http');
-
     this.timeout(1000000);
     var path = require("path");
-    // var zipPath: string = path.join(__dirname, '../', 'src/roomsFULL.zip');
-
-    function sanityCheck(response: InsightResponse) {
-        expect(response).to.have.property('code');
-        expect(response).to.have.property('body');
-        expect(response.code).to.be.a('number');
-    }
 
 
     before(function (done) {
         chai.use(chaiHttp);
-        Log.info('App - starting');
+        console.log('App - starting');
         s = new Server(1234);
         s.start().then(function (val: boolean) {
             done();
         }).catch(function (err: Error) {
-            Log.error("App::initServer() - ERROR: " + err.message);
+            console.log("App::initServer() - ERROR: " + err.message);
             done();
         });
     });
@@ -42,7 +32,7 @@ describe("EchoSpec", function () {
         s.stop().then(function () {
             done();
         });
-        Log.test('After: ' + (<any>this).test.parent.title);
+        console.log('After: ' + (<any>this).test.parent.title);
     });
 
 
@@ -61,7 +51,6 @@ describe("EchoSpec", function () {
     //             expect.fail();
     //         });
     // });
-
     // it("Testing POST (performQuery: rooms_lon EQ) Request", function () {
     //     //TODO: Use JSON.parse in InsightFacade.performQuery to make it work with REST
     //     return chai.request('http://localhost:1234')
@@ -111,7 +100,6 @@ describe("EchoSpec", function () {
     //             expect.fail();
     //         });
     // });
-
     // it("Testing DEL (remove dataset 'rooms') Request", function () {
     //     return chai.request('http://localhost:1234')
     //         .del('/dataset/rooms')
@@ -130,25 +118,17 @@ describe("EchoSpec", function () {
         return chai.request("http://localhost:1234")
             .get('/')
             .then(function (res: Response) {
-                Log.trace('then:');
-                // some assertions
             })
             .catch(function () {
-                Log.trace('catch:');
-                // some assertions
                 expect.fail();
             });
     });
-
     it("GET /echo/:msg test", function () {
         return chai.request("http://localhost:1234")
             .get('/echo/hello')
             .then(function (res: Response) {
-                Log.trace('then:');
             })
             .catch(function () {
-                Log.trace('catch:');
-                // some assertions
                 expect.fail();
             });
     });
