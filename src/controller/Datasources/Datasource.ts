@@ -21,13 +21,13 @@ export class Datasource {
             var request = require('request');
             var url = that.getURL();
             request(url, function (error: any, response: any, body: any) {
-                 that.dataObj = JSON.parse(body);
+                 var curDataObj = JSON.parse(body);
 
-                if(that.dataObj == {}){
+                if(curDataObj == {}){
                     reject("Received no data. URL attempt: " + url)
                 }else{
                     fulfill({
-                        data: that.dataObj,
+                        data: curDataObj,
                         url: url
                     });
                 }
