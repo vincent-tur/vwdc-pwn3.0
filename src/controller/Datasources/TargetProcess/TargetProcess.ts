@@ -36,25 +36,76 @@ export default class TargetProcess extends Datasource{
     }
 
     getTasks(){
-        var that = this;
+
         return Promise.all(this.iterableTasks.map(function (datasourceObj){
             return datasourceObj.getData();
         })).then(values => {
-            var newValues: any = values;
-            var firstItemset: any = newValues[0].data.items;
-            var secondItemset: any = newValues[1].data.items;
-            if (isNullOrUndefined(firstItemset)){
-                firstItemset = newValues[0].data.Items;
-            }else if(isNullOrUndefined(secondItemset)){
-                secondItemset = newValues[1].data.Items;
-            }
-            var tasksAry: any  = firstItemset.concat(secondItemset);
-            that.dataObj.Tasks = tasksAry;
+           this.parseTasks(values);
 
         }, reason => {
 
             console.log('Failure [TargetProc Tasks GET]: ' + reason);
         });
+    }
+
+    parseTasks(taskSources: Array<{}>){
+        var newValues: any = taskSources;
+        var firstItemset: any = newValues[0].data.items;
+        var secondItemset: any = newValues[1].data.items;
+        if (isNullOrUndefined(firstItemset)){
+            firstItemset = newValues[0].data.Items;
+        }else if(isNullOrUndefined(secondItemset)){
+            secondItemset = newValues[1].data.Items;
+        }
+
+        var returnItemset: any = [];
+        if (firstItemset.length < secondItemset.length){
+            //Must do this because the final return array will only have as much items as the firstItemset
+            var tempItemset = firstItemset;
+            firstItemset = secondItemset;
+            secondItemset = tempItemset;
+        }
+        var counter = 0;
+        var tempTracker: any = firstItemset.slice(0);
+        Object.keys(firstItemset).forEach(function (keyFirst){
+            if(counter <= secondItemset.length){
+                Object.keys(secondItemset).forEach(function (keySecond){
+                    var firstId = firstItemset[keyFirst].Id;
+                    var secondId = secondItemset[keySecond].Id;
+                    if(isNullOrUndefined(firstId)){
+                        firstId = firstItemset[keyFirst].id;
+                    }else if(isNullOrUndefined(secondId)){
+                        secondId = secondItemset[keySecond].id;
+                    }
+                    // if(isNullOrUndefined(firstItemset.Id) == false &&  isNullOrUndefined(secondItemset.Id) == false){
+                    if(firstId == secondId){
+
+                        var curItem: any = {};
+                        Object.keys(firstItemset[keyFirst]).forEach(function(propKeyItem1){
+                            curItem[propKeyItem1] = firstItemset[keyFirst][propKeyItem1];
+                        });
+                        Object.keys(secondItemset[keySecond]).forEach(function(propKeyItem2){
+                            curItem[propKeyItem2] = secondItemset[keySecond][propKeyItem2];
+                        });
+                        returnItemset.push(curItem);
+
+                        // tempTracker.splice(parseInt(keyFirst), 1);
+
+                    }
+                    // }
+
+                });
+            }else{
+                returnItemset.push(tempTracker[keyFirst]);
+            }
+
+            if(counter == 11){
+                console.log('here');
+            }
+            counter++;
+        });
+
+        this.dataObj.Tasks = returnItemset;
     }
     getUserStories(){
         var that = this;
@@ -99,7 +150,7 @@ export default class TargetProcess extends Datasource{
             type: 'UserStories',
             queryParams: {
                 access_token: 'MTpPcWtkaEVpaVZJQjhraXREUVc1UWRyRHdYWS9KOGdnUWFBT1pjSzJJd29FPQ==',
-                select: '{id,focus:CustomValues.Get("Focus%20level").value,topic_hardness:CustomValues.Get("Topic%20hardness").value,study_importance:CustomValues.get("Importance%20to%20study").value,first_encounter:CustomValues["First%20encounter"]}',
+                select: '{id:Id,focus:CustomValues.Get("Focus%20level").value,topic_hardness:CustomValues.Get("Topic%20hardness").value,study_importance:CustomValues.get("Importance%20to%20study").value,first_encounter:CustomValues["First%20encounter"]}',
                 take: '5000'
             }
         });
@@ -124,7 +175,7 @@ export default class TargetProcess extends Datasource{
             type: 'Tasks',
             queryParams: {
                 access_token: 'MTpPcWtkaEVpaVZJQjhraXREUVc1UWRyRHdYWS9KOGdnUWFBT1pjSzJJd29FPQ==',
-                select: '{id,focus:CustomValues.Get("Focus%20level").value,topic_hardness:CustomValues.Get("Topic%20hardness").value,study_importance:CustomValues.get("Importance%20to%20study").value,first_encounter:CustomValues["First%20encounter"]}',
+                select: '{id:Id,focus:CustomValues.Get("Focus%20level").value,topic_hardness:CustomValues.Get("Topic%20hardness").value,study_importance:CustomValues.get("Importance%20to%20study").value,first_encounter:CustomValues["First%20encounter"]}',
                 take: '5000'
             }
         });
