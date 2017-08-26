@@ -1,5 +1,5 @@
 export class Datasource {
-    dataObj: {};
+    dataObj: any;
     dataUrlParams: {[paramName: string] : string};
     dataUrlBase: string;
 
@@ -14,6 +14,15 @@ export class Datasource {
         return this.dataUrlBase;
     };
 
+    getDataObj(){
+        var rtnObj: Array<{}> = [];
+        var that = this;
+        Object.keys(this.dataObj).forEach(function (key){
+            rtnObj = rtnObj.concat(that.dataObj[key]);
+        });
+        return JSON.stringify(rtnObj);
+    }
+
     getData() {
         var that = this;
 
@@ -21,8 +30,8 @@ export class Datasource {
             var request = require('request');
             var url = that.getURL();
             request(url, function (error: any, response: any, body: any) {
-                 that.dataObj = JSON.parse(body);
-
+                that.dataObj[0] = JSON.parse(body);
+                that.formatDataObj();
                 if(that.dataObj == {}){
                     reject("Received no data. URL attempt: " + url)
                 }else{
@@ -37,5 +46,9 @@ export class Datasource {
                 // console.log('body:', body); // Print the HTML for the Google homepage.
             });
         });
+    }
+
+    formatDataObj(){
+
     }
 }

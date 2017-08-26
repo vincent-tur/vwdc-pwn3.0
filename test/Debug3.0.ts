@@ -39,32 +39,36 @@ describe("Debug [vwdc-pwn3.0] Spec", function () {
 
     it("3.0 First Test - Toggl", function () {
         let tgl = new Toggl();
-        return tgl.getData();
+        return tgl.getData().then(function (){
+            tgl.getDataObj();
+        });
     });
     it("3.0 First Test - TargetProcess", function () {
         let tp = new TargetProcess();
         return tp.getData();
     });
 
-    it("GET /", function () {
-        return chai.request("http://localhost:1234")
-            .get('/')
-            .then(function (res: Response) {
 
-            })
-            .catch(function () {
-                expect.fail();
-            });
-    });
-    it("GET /echo/:msg test", function () {
-        return chai.request("http://localhost:1234")
-            .get('/echo/hello')
-            .then(function (res: Response) {
-            })
-            .catch(function () {
-                expect.fail();
-            });
-    });
+    //
+    // it("GET /", function () {
+    //     return chai.request("http://localhost:1234")
+    //         .get('/')
+    //         .then(function (res: Response) {
+    //
+    //         })
+    //         .catch(function () {
+    //             expect.fail();
+    //         });
+    // });
+    // it("GET /echo/:msg test", function () {
+    //     return chai.request("http://localhost:1234")
+    //         .get('/echo/hello')
+    //         .then(function (res: Response) {
+    //         })
+    //         .catch(function () {
+    //             expect.fail();
+    //         });
+    // });
 
     // it("Testing PUT (add dataset 'rooms') Request", function () {
     //     return chai.request('http://localhost:1234')

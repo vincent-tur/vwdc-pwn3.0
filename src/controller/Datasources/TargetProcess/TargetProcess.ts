@@ -30,6 +30,7 @@ export default class TargetProcess extends Datasource{
         var that = this;
         return that.getStuff("UserStories", that.iterableUserStories).then(function (){
             return  that.getStuff("Tasks", that.iterableTasks).then(function (){
+                that.getDataObj();
                 console.log("Done getting TargetProcess Data");
             });
         });
@@ -40,7 +41,9 @@ export default class TargetProcess extends Datasource{
         return Promise.all(iterableStuff.map(function (datasourceObj){
             return datasourceObj.getData();
         })).then(values => {
-            that.dataObj[dataObjKey] = this.extractGeneral(values);
+            var extracted = that.extractGeneral(values);
+            that.dataObj[dataObjKey] = extracted;
+
         }, reason => {
             console.log('Failure [TargetProc Tasks GET]: ' + reason);
         });
@@ -49,12 +52,12 @@ export default class TargetProcess extends Datasource{
 
     extractGeneral(sources: any){
         var newValues: any = sources;
-        var firstItemset: any = newValues[0].data.items;
-        var secondItemset: any = newValues[1].data.items;
+        var firstItemset: any = newValues[0].data[0].items;
+        var secondItemset: any = newValues[1].data[0].items;
         if (isNullOrUndefined(firstItemset)){
-            firstItemset = newValues[0].data.Items;
+            firstItemset = newValues[0].data[0].Items;
         }else if(isNullOrUndefined(secondItemset)){
-            secondItemset = newValues[1].data.Items;
+            secondItemset = newValues[1].data[0].Items;
         }
 
         var returnItemset: any = [];

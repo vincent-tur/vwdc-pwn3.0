@@ -3,7 +3,7 @@ import {Datasource} from "../Datasource";
 
 export default class Toggl extends Datasource{
 
-    dataObj: {};
+    dataObj: any;
     dataUrlParams: {[paramName: string] : string};
     dataUrlBase: string;
 
@@ -21,7 +21,6 @@ export default class Toggl extends Datasource{
     }
 
     getURL(): {}{
-
         let urlObj = {
                         url: this.dataUrlBase + "?user_agent="+this.dataUrlParams['email']+"&workspace_id="+this.dataUrlParams['workspace']+"&since="+this.dataUrlParams['startt']+"&until="+this.dataUrlParams['endt'],
                         headers: {
@@ -29,5 +28,9 @@ export default class Toggl extends Datasource{
                         }
                      };
         return urlObj;
+    }
+
+    formatDataObj(){
+        this.dataObj = this.dataObj[0].data;
     }
 }
