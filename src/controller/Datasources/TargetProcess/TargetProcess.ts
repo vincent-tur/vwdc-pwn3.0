@@ -28,28 +28,27 @@ export default class TargetProcess extends Datasource{
 
     getData(): any{
         var that = this;
-        return that.getTasks().then(function (){
-            return  that.getUserStories().then(function (){
-               console.log("Done getting TargetProcess Data");
+        return that.getStuff("UserStories", that.iterableUserStories).then(function (){
+            return  that.getStuff("Tasks", that.iterableTasks).then(function (){
+                console.log("Done getting TargetProcess Data");
             });
         });
     }
 
-    getTasks(){
-
-        return Promise.all(this.iterableTasks.map(function (datasourceObj){
+    getStuff(dataObjKey: string, iterableStuff: Array<Datasource>){
+        var that = this;
+        return Promise.all(iterableStuff.map(function (datasourceObj){
             return datasourceObj.getData();
         })).then(values => {
-           this.parseTasks(values);
-
+            that.dataObj[dataObjKey] = this.extractGeneral(values);
         }, reason => {
-
             console.log('Failure [TargetProc Tasks GET]: ' + reason);
         });
     }
 
-    parseTasks(taskSources: Array<{}>){
-        var newValues: any = taskSources;
+
+    extractGeneral(sources: any){
+        var newValues: any = sources;
         var firstItemset: any = newValues[0].data.items;
         var secondItemset: any = newValues[1].data.items;
         if (isNullOrUndefined(firstItemset)){
@@ -79,53 +78,31 @@ export default class TargetProcess extends Datasource{
                     }
                     // if(isNullOrUndefined(firstItemset.Id) == false &&  isNullOrUndefined(secondItemset.Id) == false){
                     if(firstId == secondId){
-
                         var curItem: any = {};
                         Object.keys(firstItemset[keyFirst]).forEach(function(propKeyItem1){
-                            curItem[propKeyItem1] = firstItemset[keyFirst][propKeyItem1];
+                            if(propKeyItem1 != 'Id'){
+                                curItem[propKeyItem1] = firstItemset[keyFirst][propKeyItem1];
+                            }
+
                         });
                         Object.keys(secondItemset[keySecond]).forEach(function(propKeyItem2){
-                            curItem[propKeyItem2] = secondItemset[keySecond][propKeyItem2];
+                            if(propKeyItem2 != 'Id'){
+                                curItem[propKeyItem2] = secondItemset[keySecond][propKeyItem2];
+                            }
                         });
                         returnItemset.push(curItem);
-
-                        // tempTracker.splice(parseInt(keyFirst), 1);
-
                     }
-                    // }
-
                 });
             }else{
                 returnItemset.push(tempTracker[keyFirst]);
             }
-
-            if(counter == 11){
-                console.log('here');
-            }
             counter++;
         });
+        return returnItemset;
+    }
 
-        this.dataObj.Tasks = returnItemset;
-    }
-    getUserStories(){
-        var that = this;
-        return Promise.all(this.iterableUserStories.map(function (datasourceObj){
-            return datasourceObj.getData();
-        })).then(values => {
-            var newValues: any = values;
-            var firstItemset: any = newValues[0].data.items;
-            var secondItemset: any = newValues[1].data.items;
-            if (isNullOrUndefined(firstItemset)){
-                firstItemset = newValues[0].data.Items;
-            }else if(isNullOrUndefined(secondItemset)){
-                secondItemset = newValues[1].data.Items;
-            }
-            var userStoriesAry: any  = firstItemset.concat(secondItemset);
-            that.dataObj.UserStories = userStoriesAry;
-        }, reason => {
-            console.log('Failure [TargetProc UserStories GET]: ' + reason);
-        });
-    }
+
+
     addDatasources() {
         var buildUrl = require('build-url');
         var dataUrlParams: {[paramName: string] : string} = {};
