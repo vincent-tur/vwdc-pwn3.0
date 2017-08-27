@@ -39,8 +39,9 @@
         $.ajax({
             type: 'GET',
             dataType: 'jsonp',
-            url: "http://localhost:4321/get_toggl/",
+            url: "http://localhost:4321/get_tp/",
             success: function(resp) {
+                console.log(resp);
                 var feat = resp.items,
                     tableData = [];
 
@@ -65,7 +66,7 @@
     // Create event listeners for when the user submits the form
     $(document).ready(function() {
         $("#submitButton").click(function() {
-            tableau.connectionName = "TargetProcess UserStory Connector"; // This will be the data source name in Tableau
+            tableau.connectionName = "TargetProcess Connector"; // This will be the data source name in Tableau
             tableau.submit(); // This sends the connector object to Tableau
         });
     });

@@ -4,7 +4,8 @@
  */
 
 import restify = require('restify');
-
+import Toggl from "../controller/Datasources/Toggl/Toggl";
+import TargetProcess from "../controller/Datasources/TargetProcess/TargetProcess";
 
 // import {InsightResponse} from "../controller/IInsightFacade";
 // import InsightFacade from "../controller/Backend";
@@ -70,6 +71,8 @@ export default class Server {
                     return next();
                 });
                 that.rest.get('/echo/:msg', Server.echo);
+                that.rest.get('/get_toggl/:msg', Server.getToggl);
+                that.rest.get('/get_tp/:msg', Server.getTargetProcess);
                 // that.rest.put('/dataset/:id', Server.addDataset);
                 // that.rest.del('/dataset/:id', Server.removeDataset);
                 // that.rest.post('/query/:request', Server.performQuery);
@@ -89,6 +92,27 @@ export default class Server {
                 reject(err);
             }
         });
+    }
+
+    public static getToggl(req: restify.Request, res: restify.Response, next: restify.Next){
+        let tgl = new Toggl();
+        tgl.getData().then(function (){
+           let serv_response =  tgl.getDataObj();
+           res.json(200, serv_response);
+        });
+
+        return next();
+    }
+
+
+    public static getTargetProcess(req: restify.Request, res: restify.Response, next: restify.Next){
+        let tp = new TargetProcess();
+        tp.getData().then(function (){
+            let serv_response =  tp.getDataObj();
+            res.json(200, serv_response);
+        });
+
+        return next();
     }
 
     public static echo(req: restify.Request, res: restify.Response, next: restify.Next) {

@@ -15,6 +15,7 @@ export class Datasource {
     };
 
     getDataObj(){
+        console.log("Getting data object...");
         var rtnObj: Array<{}> = [];
         var that = this;
         Object.keys(this.dataObj).forEach(function (key){
