@@ -19,17 +19,20 @@
             id: "study_importance",
             alias: "Study importance",
             dataType: tableau.dataTypeEnum.string
-        },
-            {
-                id: "first_encounter",
-                alias: "First encounter",
-                dataType: tableau.dataTypeEnum.string
-            }
+        }, {
+            id: "first_encounter",
+            alias: "First encounter",
+            dataType: tableau.dataTypeEnum.string
+        },  {
+            id: "desc",
+            alias: "Description",
+            dataType: tableau.dataTypeEnum.string
+        }
         ];
 
         var tableSchema = {
             id: "targetProcessData",
-            alias: "TargetProcess User Stories",
+            alias: "TargetProcess Data",
             columns: cols
         };
 
@@ -56,7 +59,8 @@
                         "focus": feat[i].focus,
                         "topic_hardness": feat[i].topic_hardness,
                         "study_importance": feat[i].study_importance,
-                        "first_encounter": feat[i].first_encounter
+                        "first_encounter": feat[i].first_encounter,
+                        "desc": feat[i].Description
                     });
                 }
 
