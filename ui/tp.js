@@ -11,19 +11,20 @@
             id: "focus",
             alias: "Focus level",
             dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "topic_hardness",
-            alias: "Topic hardness",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "study_importance",
-            alias: "Study importance",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "first_encounter",
-            alias: "First encounter",
-            dataType: tableau.dataTypeEnum.string
-        }];
+        }
+            // , {
+        //     id: "topic_hardness",
+        //     alias: "Topic hardness",
+        //     dataType: tableau.dataTypeEnum.string
+        // }, {
+        //     id: "study_importance",
+        //     alias: "Study importance",
+        //     dataType: tableau.dataTypeEnum.string
+        // }, {
+        //     id: "first_encounter",
+        //     alias: "First encounter",
+        //     dataType: tableau.dataTypeEnum.string
+        ];
 
         var tableSchema = {
             id: "targetProcessData",
@@ -49,11 +50,12 @@
                 // Iterate over the JSON object
                 for (var i = 0, len = feat.length; i < len; i++) {
                     tableData.push({
-                        "id": feat[i].id,
-                        "focus": feat[i].focus,
-                        "topic_hardness": feat[i].topic_hardness,
-                        "study_importance": feat[i].study_importance,
-                        "first_encounter": feat[i].first_encounter
+                        "id": feat[i].id
+                        // ,
+                        // "focus": feat[i].focus,
+                        // "topic_hardness": feat[i].topic_hardness,
+                        // "study_importance": feat[i].study_importance,
+                        // "first_encounter": feat[i].first_encounter
                     });
                 }
 
