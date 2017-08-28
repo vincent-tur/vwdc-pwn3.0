@@ -51,7 +51,7 @@ var token = '';
         }
         var url = "http://localhost:4321/get_toggl/";
         tableau.log(url);
-
+        console.log('over here');
         for(q = 1; q <= len; q++){
             async_request.push(
                 $.ajax({
@@ -63,10 +63,13 @@ var token = '';
                     },
                     success: function (resp) {
                         console.log("RESPONSE: " + resp);
-                        var tasks = resp.body;
+                        // document.write(resp);
+                        // alert(resp);
+                        var tasks = JSON.parse(resp);
 
                         for (var i = 0, len = tasks.length; i < len; i++){
-                            console.log('oi');
+                            // alert(tasks[i].sweaty.sweaty);
+                            // document.write("SWEATY BOY: " + JSON.stringify(tasks[i]));
                             desc = tasks[i].description;
                             start = tasks[i].start.substring(0,10) + " " + tasks[i].start.substring(11,18);
                             end = tasks[i].end.substring(0,10) + " " + tasks[i].end.substring(11,18);
@@ -102,21 +105,7 @@ var token = '';
                             if(tags !== undefined && tags !== null && Array.isArray(tags) && tags.length > 0){
 
                                 for(b = 0; b < tags.length; b++){
-                                    // if(restrictedTags.includes(tags[b])){
-                                    // 	continue;
-                                    // }
 
-
-                                    // if(tags[b] == null || tags[b] == undefined){
-                                    // 	continue;
-                                    // }
-                                    // if(tags[b][0] == '!'){
-                                    // 	specialTag = tags[b].split(":");
-
-                                    // 	if(specialTag[0] == '!Column'){
-                                    // 		// if(sp)
-                                    // 	}
-                                    // }
                                     tableData.push({
                                         "desc" : desc,
                                         "tp_id" : tp_id,
@@ -136,12 +125,15 @@ var token = '';
 
 
                         }
+                        // document.write("DA TABLEDTA: " + JSON.stringify(tableData));
+
                     }
                 })
             );
         }
 
         $.when.apply(null, async_request).done( function(){
+            tableau.log(tableData);
             table.appendRows(tableData);
             doneCallback();
         });
@@ -152,8 +144,16 @@ var token = '';
 
     $(document).ready(function () {
         $("#submitb").click(function () {
-            myConnector.getData();
+            // myConnector.getData();
+            pagesCallback();
         });
     });
 
+    function pagesCallback(){
+
+        tableau.connectionData = JSON.stringify([1, email, workspace, token, startt, endt, 1]);
+
+        tableau.connectionName = "Toggl";
+        tableau.submit();
+    }
 })();

@@ -96,12 +96,13 @@ export default class Server {
 
     public static getToggl(req: restify.Request, res: restify.Response, next: restify.Next){
         let tgl = new Toggl();
-        tgl.getData().then(function (){
+        return tgl.getData().then(function (){
            let serv_response =  tgl.getDataObj();
            res.json(200, serv_response);
+           return next();
         });
 
-        return next();
+
     }
 
 
