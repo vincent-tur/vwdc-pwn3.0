@@ -38,11 +38,12 @@
     myConnector.getData = function(table, doneCallback) {
         $.ajax({
             type: 'GET',
-            dataType: 'jsonp',
+            dataType: 'json',
             url: "http://localhost:4321/get_tp/",
             success: function(resp) {
-                console.log(resp);
-                var feat = resp.items,
+
+
+                var feat = JSON.parse(resp),
                     tableData = [];
 
                 // Iterate over the JSON object

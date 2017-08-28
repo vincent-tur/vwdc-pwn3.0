@@ -108,12 +108,13 @@ export default class Server {
 
     public static getTargetProcess(req: restify.Request, res: restify.Response, next: restify.Next){
         let tp = new TargetProcess();
-        tp.getData().then(function (){
+        return tp.getData().then(function (){
             let serv_response =  tp.getDataObj();
             res.json(200, serv_response);
+            return next();
         });
 
-        return next();
+
     }
 
     public static echo(req: restify.Request, res: restify.Response, next: restify.Next) {
