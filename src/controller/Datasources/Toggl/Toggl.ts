@@ -7,6 +7,7 @@ export default class Toggl extends Datasource{
     dataUrlParams: {[paramName: string] : string};
     dataUrlBase: string;
 
+
     constructor(){
         super();
 

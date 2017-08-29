@@ -27,7 +27,7 @@ export class Datasource {
         return JSON.stringify(rtnObj);
     }
 
-    public getData(urlObj: any = null, dataObjIndex: any = 0) {
+    public getData(urlObj: any = null, dataObjIndex: any = 0): Promise<any> {
         var that = this;
 
         return new Promise(function (fulfill, reject) {
