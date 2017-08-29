@@ -35,6 +35,7 @@ export default class TargetProcess extends Datasource{
 
             Description = "\n" + striptags(Description);
             Description = he.decode(Description);
+            Description = Description.replace(/\n\n/g, "\n");
         }
         return Description;
 
