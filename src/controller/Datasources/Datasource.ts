@@ -21,7 +21,7 @@ export class Datasource {
         return this.dataUrlBase;
     };
 
-    getDataObj(format: string = "json") {
+    getDataObj(format: string = "string") {
         console.log("Getting data object...");
         var rtnObj: Array<{}> = [];
         var that = this;
