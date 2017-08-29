@@ -45,7 +45,9 @@ export default class Toggl extends Datasource{
                 var responseObj = JSON.parse(body);
                 var totalEntries = responseObj["total_count"];
                 var pages = String(Math.ceil(totalEntries/50));
-                that.getDataNEW(0,50, totalEntries, {urlParamName: 'page', value: pages})
+                that.getDataNEW(0,50, totalEntries, {param: 'page', value: pages}).then(function (response){
+                   return fulfill(response);
+                });
                 // console.log('error:', error); // Print the error if one occurred
                 // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
                 // console.log('body:', body); // Print the HTML for the Google homepage.
@@ -62,7 +64,11 @@ export default class Toggl extends Datasource{
         //     // success: pagesCallback
         // });
     }
-    formatDataObj(){
-        this.dataObj = this.dataObj[0].data;
+    formatDataObj() {
+        var that = this;
+        Object.keys(this.dataObj).forEach(function (key){
+            that.dataObj[key] = that.dataObj[key].data;
+        });
+
     }
 }

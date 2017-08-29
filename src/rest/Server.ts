@@ -95,6 +95,7 @@ export default class Server {
     }
 
     public static getToggl(req: restify.Request, res: restify.Response, next: restify.Next){
+        console.log("Server request: get_toggle");
         let tgl = new Toggl();
         return tgl.getData().then(function (){
            let serv_response =  tgl.getDataObj();
