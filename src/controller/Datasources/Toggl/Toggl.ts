@@ -45,7 +45,7 @@ export default class Toggl extends Datasource{
                 var responseObj = JSON.parse(body);
                 var totalEntries = responseObj["total_count"];
                 var pages = String(Math.ceil(totalEntries/50));
-                that.getDataNEW(0,50, totalEntries, {param: 'page', value: pages}).then(function (response){
+                that.getDataNEW(1,50, totalEntries, {param: 'page', value: pages}).then(function (response){
                    return fulfill(response);
                 });
                 // console.log('error:', error); // Print the error if one occurred

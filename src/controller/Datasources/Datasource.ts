@@ -92,11 +92,11 @@ export class Datasource {
 
             var urlObj = that.getURL();
 
-            var loopCounter = 0;
+            var loopCounter = start;
             var linkAry = [];
 
-            for (var i: number = start; i < end; i += iterateBy) {
-                var tempUrlObj = Object.assign({}, urlObj)
+            for (var i: number = start; i < end; i += iterateBy, loopCounter++) {
+                var tempUrlObj = Object.assign({}, urlObj);
                 tempUrlObj.url = urlObj.url + "&" + curPage.param + "=" + loopCounter;
                 linkAry.push(tempUrlObj);
             }
@@ -107,7 +107,7 @@ export class Datasource {
                 that.formatDataObj();
 
                 return fulfill({
-                    data: that.dataObj,
+                    data: that.getDataObj(),
                     url: JSON.stringify(urlObj)
                 });
             });
