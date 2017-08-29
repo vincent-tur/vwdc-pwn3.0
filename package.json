@@ -14,7 +14,8 @@
     "build-url": "^1.0.10",
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
-    "he": "^1.1.1"
+    "he": "^1.1.1",
+    "node-fetch": "^1.7.2"
   },
   "scripts": {
     "clean": "rm -rf ./node_modules/ .yarnclean",

@@ -15,7 +15,7 @@ describe("Debug [vwdc-pwn3.0] Spec", function () {
 
     var fs = require("fs");
     var path = require("path");
-
+    //TODO: Spent 1.92h Remain: 5.92H
 
     before(function (done) {
         chai.use(chaiHttp);
@@ -34,6 +34,18 @@ describe("Debug [vwdc-pwn3.0] Spec", function () {
             done();
         });
         console.log('After: ' + (<any>this).test.parent.title);
+    });
+
+    it("3.0aaaa First Test - Toggl", function () {
+        var fetch = require('node-fetch');
+        return fetch('https://v.tpondemand.com/api/v1/assignables/216?access_token=MTpuRjdJUFU4WkYrcFNnQ3hyam5PanlPbGVZUG9nbGFWTSt2aHJXWXdxNWl3PQ==&include=[TimeRemain,RoleEfforts]&format=json')
+            .then(function(res: any) {
+
+                return res.json();
+            }).then(function(json: any) {
+            console.log(json);
+            console.log('over here');
+        });
     });
 
 
