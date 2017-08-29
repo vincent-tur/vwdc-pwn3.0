@@ -1,5 +1,6 @@
 import {Datasource} from "../Datasource";
 import {isNullOrUndefined} from "util";
+import {unescape} from "querystring";
 
 export default class TargetProcess extends Datasource{
     dataObj: any;
@@ -19,6 +20,26 @@ export default class TargetProcess extends Datasource{
         this.addDatasources();
     }
 
+    formatDataObj(){
+        this.collapseDataObj();
+
+        var that = this;
+        for(var i: number = 0; i < that.dataObj.length; i++){
+            that.dataObj[i].Description = this.formatDataObjDesc(that.dataObj[i].Description);
+        }
+    }
+    formatDataObjDesc(Description: string){
+        if(Description != null){
+            var striptags = require('striptags');
+            var he = require('he');
+
+            Description = "\n" + striptags(Description);
+            Description = he.decode(Description);
+        }
+        return Description;
+
+    }
+
     getURL(): {}{
         let urlObj = {
             url: this.dataUrlBase + "?access_token=" + this.dataUrlParams["access_token"] + "&select=" + this.dataUrlParams["select"] + "&take=" + this.dataUrlParams["take"],
@@ -26,10 +47,12 @@ export default class TargetProcess extends Datasource{
         return urlObj;
     }
 
+
     getData(): any{
         var that = this;
         return that.getStuff("UserStories", that.iterableUserStories).then(function (){
             return  that.getStuff("Tasks", that.iterableTasks).then(function (){
+                that.formatDataObj();
                 that.getDataObj();
                 console.log("Done getting TargetProcess Data");
             });
@@ -178,6 +201,8 @@ export default class TargetProcess extends Datasource{
 
 
     }
+
+
 
 
 

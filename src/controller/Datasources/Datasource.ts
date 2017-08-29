@@ -23,6 +23,7 @@ export class Datasource {
         Object.keys(this.dataObj).forEach(function (key) {
             rtnObj = rtnObj.concat(that.dataObj[key]);
         });
+
         return JSON.stringify(rtnObj);
     }
 
@@ -113,7 +114,15 @@ export class Datasource {
             });
         });
     }
-
+    collapseDataObj(){
+        var rtnObj: any = [];
+        var that = this;
+        Object.keys(this.dataObj).forEach(function (key) {
+            rtnObj = rtnObj.concat(that.dataObj[key]);
+        });
+        that.dataObj = rtnObj;
+        return;
+    }
 
     formatDataObj() {
 
