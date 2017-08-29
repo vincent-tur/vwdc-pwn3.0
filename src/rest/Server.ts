@@ -6,6 +6,7 @@
 import restify = require('restify');
 import Toggl from "../controller/Datasources/Toggl/Toggl";
 import TargetProcess from "../controller/Datasources/TargetProcess/TargetProcess";
+import Backend from "../controller/Backend";
 
 // import {InsightResponse} from "../controller/IInsightFacade";
 // import InsightFacade from "../controller/Backend";
@@ -25,7 +26,7 @@ export default class Server {
     //TODO: private rest: restify.Server;
     public rest: restify.Server;
 
-    // static insightFacade: InsightFacade;
+    static Backend: Backend;
 
     constructor(port: number) {
         // Log.info("Server::<init>( " + port + " )");
@@ -63,7 +64,8 @@ export default class Server {
                 that.rest = restify.createServer({
                     name: 'insightUBC'
                 });
-                // Server.insightFacade = new InsightFacade;
+
+                Server.Backend = new Backend;
 
                 that.rest.use(restify.bodyParser({mapParams: true, mapFiles: true}));
                 that.rest.get('/', function (req: restify.Request, res: restify.Response, next: restify.Next) {
@@ -73,6 +75,9 @@ export default class Server {
                 that.rest.get('/echo/:msg', Server.echo);
                 that.rest.get('/get_toggl/:msg', Server.getToggl);
                 that.rest.get('/get_tp/:msg', Server.getTargetProcess);
+                that.rest.get('/one_step/:msg', Server.getOneStep);
+
+
                 // that.rest.put('/dataset/:id', Server.addDataset);
                 // that.rest.del('/dataset/:id', Server.removeDataset);
                 // that.rest.post('/query/:request', Server.performQuery);
@@ -92,6 +97,19 @@ export default class Server {
                 reject(err);
             }
         });
+    }
+
+    public static getOneStep(req: restify.Request, res: restify.Response, next: restify.Next){
+        console.log("Server request: get_oneStep");
+        Server.Backend.getOneStep().then(function (result: any){
+            res.json(200, result)
+        }).catch(function (result: any){
+            res.json(500, result.message)
+        });
+
+        return next();
+
+
     }
 
     public static getToggl(req: restify.Request, res: restify.Response, next: restify.Next){

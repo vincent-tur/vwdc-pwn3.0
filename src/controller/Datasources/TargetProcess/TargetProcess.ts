@@ -26,11 +26,8 @@ export default class TargetProcess extends Datasource{
         var that = this;
         for(var i: number = 0; i < that.dataObj.length; i++){
             that.dataObj[i].Description = this.formatDataObjDesc(that.dataObj[i].Description);
-            // that.dataObj[i]
-
         }
     }
-
     formatDataObjDesc(Description: string){
         if(Description != null){
             var striptags = require('striptags');
@@ -43,17 +40,6 @@ export default class TargetProcess extends Datasource{
         return Description;
 
     }
-
-    formatTags(dataObjIndex: number){
-        /*
-            To do this, must get the corresponding time entry (dur) in Toggl data object
-            (by matching TP id to Toggl id) and then divide dur by the number of tags.
-
-            Then, to compensate for uneven spending of time between the tags, multiply
-            that result by about .75
-        */
-    }
-
 
     getURL(): {}{
         let urlObj = {
@@ -68,8 +54,8 @@ export default class TargetProcess extends Datasource{
         return that.getStuff("UserStories", that.iterableUserStories).then(function (){
             return  that.getStuff("Tasks", that.iterableTasks).then(function (){
                 that.formatDataObj();
-                that.getDataObj();
-                console.log("Done getting TargetProcess Data");
+                return that.getDataObj();
+                // console.log("Done getting TargetProcess Data");
             });
         });
     }
@@ -142,6 +128,8 @@ export default class TargetProcess extends Datasource{
         return returnItemset;
     }
 
+
+
     addDatasources() {
         var buildUrl = require('build-url');
         var dataUrlParams: {[paramName: string] : string} = {};
@@ -166,7 +154,7 @@ export default class TargetProcess extends Datasource{
             type: 'UserStories',
             queryParams: {
                 access_token: 'MTpPcWtkaEVpaVZJQjhraXREUVc1UWRyRHdYWS9KOGdnUWFBT1pjSzJJd29FPQ==',
-                select: '{id:Id,tags,focus:CustomValues.Get("Focus%20level").value,topic_hardness:CustomValues.Get("Topic%20hardness").value,study_importance:CustomValues.get("Importance%20to%20study").value,first_encounter:CustomValues["First%20encounter"]}',
+                select: '{id:Id,focus:CustomValues.Get("Focus%20level").value,topic_hardness:CustomValues.Get("Topic%20hardness").value,study_importance:CustomValues.get("Importance%20to%20study").value,first_encounter:CustomValues["First%20encounter"]}',
                 take: '5000'
             }
         });
@@ -191,7 +179,7 @@ export default class TargetProcess extends Datasource{
             type: 'Tasks',
             queryParams: {
                 access_token: 'MTpPcWtkaEVpaVZJQjhraXREUVc1UWRyRHdYWS9KOGdnUWFBT1pjSzJJd29FPQ==',
-                select: '{id:Id,tags,focus:CustomValues.Get("Focus%20level").value,topic_hardness:CustomValues.Get("Topic%20hardness").value,study_importance:CustomValues.get("Importance%20to%20study").value,first_encounter:CustomValues["First%20encounter"]}',
+                select: '{id:Id,focus:CustomValues.Get("Focus%20level").value,topic_hardness:CustomValues.Get("Topic%20hardness").value,study_importance:CustomValues.get("Importance%20to%20study").value,first_encounter:CustomValues["First%20encounter"]}',
                 take: '5000'
             }
         });

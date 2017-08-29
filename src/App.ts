@@ -15,7 +15,7 @@ export class App {
 
         let s = new Server(port);
         s.start().then(function (val: boolean) {
-            console.log("App::initServer(" + port + ") - Started :)")
+            console.log("App::initServer( ' + port + ' ) - Started :)")
         }).catch(function (err: Error) {
             console.log("App::initServer() - ERROR: " + err.message);
         });
