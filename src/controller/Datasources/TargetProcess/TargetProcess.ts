@@ -68,8 +68,8 @@ export default class TargetProcess extends Datasource{
         return that.getStuff("UserStories", that.iterableUserStories).then(function (){
             return  that.getStuff("Tasks", that.iterableTasks).then(function (){
                 that.formatDataObj();
-                that.getDataObj();
-                console.log("Done getting TargetProcess Data");
+                return that.getDataObj();
+                // console.log("Done getting TargetProcess Data");
             });
         });
     }
