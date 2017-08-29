@@ -61,7 +61,6 @@ export default class Toggl extends Datasource{
         Object.keys(this.dataObj).forEach(function (key){
             that.dataObj[key] = that.dataObj[key].data;
         });
-        console.log('right here');
     }
 
 
@@ -86,11 +85,10 @@ export default class Toggl extends Datasource{
             })).then(function (){
                 that.formatDataObj();
 
-                // return fulfill({
-                //     data: that.getDataObj(),
-                //     url: JSON.stringify(urlObj)
-                // });
-                return fulfill(that.getDataObj());
+                return fulfill({
+                    data: that.getDataObj(),
+                    url: JSON.stringify(urlObj)
+                });
             });
         });
     }
