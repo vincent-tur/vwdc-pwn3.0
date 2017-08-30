@@ -15,9 +15,18 @@ export default class Toggl extends Datasource{
         this.dataUrlParams['workspace'] = '2204314';
 
         //Date is in this format: 2017-07-25
-        this.dataUrlParams['startt'] = '2017-08-01';
-        this.dataUrlParams['endt'] = '2017-08-29';
+
         this.dataUrlParams['token'] = 'd323f7bda7be76cc85b7836db3eaafab';
+
+        var moment = require('moment');
+        moment().format();
+
+        var startt = moment().subtract(30, 'days').format("YYYY-MM-DD");
+        var endt = moment().format("YYYY-MM-DD");
+
+        this.dataUrlParams['startt'] = startt;
+        this.dataUrlParams['endt'] = endt;
+
     }
 
     getURL(): {}{
@@ -60,7 +69,6 @@ export default class Toggl extends Datasource{
         Object.keys(this.dataObj).forEach(function (key){
             that.dataObj[key] = that.dataObj[key].data;
         });
-        console.log('right here');
     }
 
 
