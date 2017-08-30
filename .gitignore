@@ -15,3 +15,4 @@ test/RoomSpec.ts
 test/InsightEcho.ts
 
 test/InsightEcho.ts
+*.twbr
