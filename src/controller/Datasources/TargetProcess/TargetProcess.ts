@@ -25,6 +25,9 @@ export default class TargetProcess extends Datasource{
 
         var that = this;
         for(var i: number = 0; i < that.dataObj.length; i++){
+            if(that.dataObj[i].id == 326){
+                console.log('ver here');
+            }
             that.dataObj[i].Description = this.formatDataObjDesc(that.dataObj[i].Description);
         }
     }
@@ -93,6 +96,7 @@ export default class TargetProcess extends Datasource{
         }
         var counter = 0;
         var tempTracker: any = firstItemset.slice(0);
+        //TODO: SET BREAKPOINT HERE FOR DESC BUG. THE SECOND TIME IT GETS HIT IS THE TASKS. ELEMENT 21 OF THE SECONDITEMSET IS THE PROBLEM ONE.
         Object.keys(firstItemset).forEach(function (keyFirst){
             if(counter <= secondItemset.length){
                 Object.keys(secondItemset).forEach(function (keySecond){
@@ -104,9 +108,18 @@ export default class TargetProcess extends Datasource{
                         secondId = secondItemset[keySecond].id;
                     }
                     // if(isNullOrUndefined(firstItemset.Id) == false &&  isNullOrUndefined(secondItemset.Id) == false){
+                    //TODO after above breakpoint gets hit, set breakpoint over here. before the if
+                    if(firstId == 326){
+                        console.log('326 here');
+                    }
+                    if (secondId == 326){
+                        console.log("326 description bug here");
+                    }
                     if(firstId == secondId){
+
                         var curItem: any = {};
                         Object.keys(firstItemset[keyFirst]).forEach(function(propKeyItem1){
+                            //TODO: ERROR HERE. CAN'T GET DESCRIPTION OF TASKS.
                             if(propKeyItem1 != 'Id'){
                                 curItem[propKeyItem1] = firstItemset[keyFirst][propKeyItem1];
                             }
@@ -118,6 +131,9 @@ export default class TargetProcess extends Datasource{
                             }
                         });
                         returnItemset.push(curItem);
+                        // delete secondItemset[keySecond];
+                        // delete firstItemset[keyFirst];
+                        return;
                     }
                 });
             }else{
