@@ -76,6 +76,7 @@ export default class Server {
                 that.rest.get('/get_toggl/:msg', Server.getToggl);
                 that.rest.get('/get_tp/:msg', Server.getTargetProcess);
                 that.rest.get('/one_step/:msg', Server.getOneStep);
+                that.rest.get('/pawpie/:msg', Server.pawpie);
 
 
                 // that.rest.put('/dataset/:id', Server.addDataset);
@@ -97,6 +98,15 @@ export default class Server {
                 reject(err);
             }
         });
+    }
+
+    public static pawpie(req: restify.Request, res: restify.Response, next: restify.Next){
+        const exec = require("child_process").exec;
+        exec('C:\\Users\\PC\\Desktop\\School\\CPSC304\\Textbook\\cs304.pdf').unref();
+        res.json(500, 'sup!');
+        return next();
+
+
     }
 
     public static getOneStep(req: restify.Request, res: restify.Response, next: restify.Next){
