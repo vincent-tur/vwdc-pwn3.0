@@ -5,12 +5,15 @@ export class Datasource {
     dataUrlParams: { [paramName: string]: string };
     dataUrlBase: string;
 
+    aryDataObj: Array<any>;
+
     iterableDataSources: Array<Datasource>;
     constructor(datasourceFullUrl = '') {
         this.dataObj = {};
         this.dataUrlBase = datasourceFullUrl;
         this.dataUrlParams = {};
         this.iterableDataSources = [];
+        this.aryDataObj = [];
     }
 
     setIterables(iterableDatasources: Array<Datasource>){
@@ -78,8 +81,10 @@ export class Datasource {
         })).then(values => {
             // var extracted = that.extractGeneral(values);
             // that.dataObj[dataObjKey] = extracted;
-
-            that.dataObj.push(values);
+            values.map(curVal => {
+               that.aryDataObj.push(curVal);
+            });
+            return that.aryDataObj;
         }, reason => {
             console.log('Failure [TargetProc Tasks GET]: ' + reason);
         });
