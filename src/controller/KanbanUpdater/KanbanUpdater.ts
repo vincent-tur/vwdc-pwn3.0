@@ -6,15 +6,21 @@ export class KanbanUpdater {
     // ID 136: Backlog
     // ID 195: Done
 
-    getItemsNeededLink(curId: string){
+    getItemsNeededLink(curId: string) {
         return 'https://v.tpondemand.com/api/v1/UserStories?&include=[Id,PlannedEndDate]&where=(PlannedEndDate gte \'2017-09-01\')and(EntityState.Id eq ' + curId + ')&access_token=MTpPcWtkaEVpaVZJQjhraXREUVc1UWRyRHdYWS9KOGdnUWFBT1pjSzJJd29FPQ==';
     }
 
-    getUpdateStateLink(entityId: string, newStateId: string){
+    getUpdateStateLink(entityId: string, newStateId: string) {
         //TODO: POST to /api/v1/userstories/194 payload {EntityState:{Id:82}}
         // return 'https://v.tpondemand.com/api/v1/UserStories/' + entityId + '?access_token=MTpPcWtkaEVpaVZJQjhraXREUVc1UWRyRHdYWS9KOGdnUWFBT1pjSzJJd29FPQ==';
 
     }
+
+    //TODO
+    //var timeUntil = item.plannedStartDate - today
+    //if(week <= timeUntil <= month){
+    //  updateState(itemId, newStateId)
+    //}
 
     getItemsNeedingUpdate(){
         // ID 133: Today
