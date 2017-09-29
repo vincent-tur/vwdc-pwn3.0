@@ -7,7 +7,7 @@ export class KanbanUpdater {
     // ID 195: Done
 
     getItemsNeededLink(curId: string) {
-        return 'https://v.tpondemand.com/api/v1/UserStories?&include=[Id,PlannedEndDate]&where=(PlannedEndDate gte \'2017-09-01\')and(EntityState.Id eq ' + curId + ')&access_token=MTpPcWtkaEVpaVZJQjhraXREUVc1UWRyRHdYWS9KOGdnUWFBT1pjSzJJd29FPQ==';
+        return "https://v.tpondemand.com/api/v1/UserStories?&include=[Id,PlannedStartDate]&where=(PlannedStartDate gte '2017-09-01')and(EntityState.Id eq " + curId + ")&access_token=MTpPcWtkaEVpaVZJQjhraXREUVc1UWRyRHdYWS9KOGdnUWFBT1pjSzJJd29FPQ==";
     }
 
     getUpdateStateLink(entityId: string, newStateId: string) {
@@ -34,6 +34,14 @@ export class KanbanUpdater {
                                                 '137': 'WEEK',
                                                 '<X>': 'MONTH',
                                                 '198': 'FUTURE' };
+
+        /*
+        var aryIds2: {[id: string] : string} = [ {'id': '133', 'minMinutes': '0', 'maxMinutes': '1439'}, //TODAY (0-1.99 days)
+                                                  {'id': '135', 'minMinutes': '1440', 'maxMinutes': '10079'}, //TOMORROW (2-3 days)
+                                                   {'id': '137', 'minMinutes': '10080', 'maxMinutes': '43199'}, //WEEK (1-1.99 weeks)
+                                                     {'id': 'X', 'minMinutes': '43200', 'maxMinutes': '86399'}, //MONTH (gets all time between 1-2 months. 1.99 months is considered in 1 month category
+                                                        {'id': '198', 'minMinutes': '86400'}]; //FUTURE: GREATER THAN 2.0 MONTHS];
+        */
 
         var that = this;
         return new Promise(function (fulfill, reject) {
